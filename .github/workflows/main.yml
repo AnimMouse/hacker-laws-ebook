@@ -37,19 +37,20 @@ jobs:
             hacker-laws.pdf
             hacker-laws.md
           
-      - name: Upload created PDF
+      - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: hacker-laws PDF ebook
           path: hacker-laws.pdf
           
       - name: Create Release
+        id: create-release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: latest
+          release_name: Latest Release
           draft: false
           prerelease: false
           
@@ -58,7 +59,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
           asset_path: ./hacker-laws.pdf
           asset_name: hacker-laws.pdf
           asset_content_type: application/pdf
