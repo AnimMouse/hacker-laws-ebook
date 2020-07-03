@@ -14,8 +14,10 @@ jobs:
           submodules: true
           fetch-depth: 1
           
-      - name: Copy README
-        run: cp ./hacker-laws/README.md README.md
+      - name: Copy assets
+        run: |
+          cp -v ./hacker-laws/README.md README.md
+          cp -av ./hacker-laws/images ./images
           
       - name: Fix ebook
         run: sh ebook.sh
@@ -38,5 +40,5 @@ jobs:
       - name: Upload created PDF
         uses: actions/upload-artifact@v2
         with:
-          name: hacker-laws PDF
+          name: hacker-laws PDF ebook
           path: hacker-laws.pdf
