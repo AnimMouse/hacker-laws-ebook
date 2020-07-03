@@ -68,15 +68,18 @@ jobs:
           asset_path: ./hacker-laws.pdf
           asset_name: hacker-laws.pdf
           asset_content_type: application/pdf
-          
+  numbered-release:
+    needs: build
+    runs-on: ubuntu-20.04
+    steps:
       - name: Create Numbered Release
         id: create-numbered-release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v$GITHUB_RUN_NUMBER
-          release_name: v$GITHUB_RUN_NUMBER
+          tag_name: v${{ GITHUB_RUN_NUMBER }}
+          release_name: v${{ GITHUB_RUN_NUMBER }}
           draft: false
           prerelease: false
           
