@@ -40,13 +40,52 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: hacker-laws PDF ebook
+          name: hacker-laws-pdf
           path: hacker-laws.pdf
           
       - name: Delete latest before release
         uses: ame-yu/action-delete-latest-release@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          
+  numbered-release:
+    needs: build
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: hacker-laws-pdf
+          
+      - name: Create Numbered Release
+        id: create-numbered-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: v${{ github.run_number }}
+          draft: false
+          prerelease: false
+          
+      - name: Upload Numbered Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-numbered-release.outputs.upload_url }}
+          asset_path: ./hacker-laws.pdf
+          asset_name: hacker-laws.pdf
+          asset_content_type: application/pdf
+          
+  latest-release:
+    needs: numbered-release
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: hacker-laws-pdf
           
       - name: Create Latest Release
         id: create-latest-release
@@ -65,31 +104,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create-latest-release.outputs.upload_url }}
-          asset_path: ./hacker-laws.pdf
-          asset_name: hacker-laws.pdf
-          asset_content_type: application/pdf
-          
-  numbered-release:
-    needs: build
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Create Numbered Release
-        id: create-numbered-release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ github.run_number }}
-          release_name: v${{ github.run_number }}
-          draft: false
-          prerelease: false
-          
-      - name: Upload Numbered Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create-numbered-release.outputs.upload_url }}
           asset_path: ./hacker-laws.pdf
           asset_name: hacker-laws.pdf
           asset_content_type: application/pdf
