@@ -16,9 +16,9 @@ jobs:
           
       - name: Install Requirements
         run: |
-          sudo apt update
-          sudo apt install pandoc
-          sudo apt install xelatex
+          sudo apt-get update
+          sudo apt-get install pandoc
+          sudo apt-get install texlive-xetex
           brew cask install basictex
           
       - name: Copy files from hacker-laws
