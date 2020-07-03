@@ -28,7 +28,9 @@ jobs:
         with:
           args: >-
           -V
-          toc-title:"Table Of Contents"
+          toc-title:"Table
+          Of
+          Contents"
           --toc
           --pdf-engine=pdflatex
           -s
