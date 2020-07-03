@@ -1,0 +1,37 @@
+name: Create PDF ebook
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  create:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          fetch-depth: 1
+          
+      - name: Install Requirements
+        run: |
+          sudo apt update
+          sudo apt install pandoc
+          sudo apt install xelatex
+          brew cask install basictex
+          
+      - name: Copy files from hacker-laws
+        run: |
+          cp ./hacker-laws/assets/ebook.sh ebook.sh
+          cp ./hacker-laws/README.md README.md
+          
+      - name: Create PDF
+        run: |
+          sh ebook.sh
+          
+      - name: Upload created PDF
+        uses: actions/upload-artifact@v2
+        with:
+          name: hacker-laws PDF
+          path: hacker-laws.pdf
