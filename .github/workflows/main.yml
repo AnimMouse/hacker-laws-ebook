@@ -68,6 +68,7 @@ jobs:
           asset_path: ./hacker-laws.pdf
           asset_name: hacker-laws.pdf
           asset_content_type: application/pdf
+          
   numbered-release:
     needs: build
     runs-on: ubuntu-20.04
@@ -78,8 +79,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ GITHUB_RUN_NUMBER }}
-          release_name: v${{ GITHUB_RUN_NUMBER }}
+          tag_name: v${{ github.run_number }}
+          release_name: v${{ github.run_number }}
           draft: false
           prerelease: false
           
