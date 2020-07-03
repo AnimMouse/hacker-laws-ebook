@@ -43,6 +43,11 @@ jobs:
           name: hacker-laws PDF ebook
           path: hacker-laws.pdf
           
+      - name: Delete latest before release
+        uses: ame-yu/action-delete-latest-release@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Create Release
         id: create-release
         uses: actions/create-release@v1
