@@ -14,7 +14,7 @@ jobs:
           submodules: true
           fetch-depth: 1
           
-      - name: Copy hacker-laws
+      - name: Copy README
         run: cp ./hacker-laws/README.md README.md
           
       - name: Fix ebook
