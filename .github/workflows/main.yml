@@ -5,7 +5,7 @@ on:
       - master
 
 jobs:
-  create:
+  build:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
@@ -19,13 +19,13 @@ jobs:
           cp -v ./hacker-laws/README.md README.md
           cp -av ./hacker-laws/images ./images
           
-      - name: Fix ebook
-        run: sh ebook.sh
+      - name: Create MD for ebook
+        run: sh -x ebook.sh
           
       - name: Create PDF
         uses: docker://pandoc/latex:latest
         with:
-          args: >-
+          args: >- # allows you to break string into multiple lines
             -V
             toc-title:"Table
             Of
@@ -35,7 +35,7 @@ jobs:
             -s
             -o
             hacker-laws.pdf
-            hacker-laws.md"
+            hacker-laws.md
           
       - name: Upload created PDF
         uses: actions/upload-artifact@v2
