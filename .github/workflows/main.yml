@@ -26,7 +26,15 @@ jobs:
         uses: docker://pandoc/latex:latest
         working-directory: ./hacker-laws
         with:
-          args: "-V toc-title:"Table Of Contents" --toc --pdf-engine=pdflatex -s -o hacker-laws.pdf hacker-laws.md"
+          args: >-
+          -V
+          toc-title:"Table Of Contents"
+          --toc
+          --pdf-engine=pdflatex
+          -s
+          -o
+          hacker-laws.pdf
+          hacker-laws.md"
           
       - name: Upload created PDF
         uses: actions/upload-artifact@v2
