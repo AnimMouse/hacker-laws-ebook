@@ -74,7 +74,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create-numbered-release.outputs.upload_url }}
-          asset_path: ./hacker-laws.pdf
+          asset_path: ./hacker-laws-pdf/hacker-laws.pdf
           asset_name: hacker-laws.pdf
           asset_content_type: application/pdf
           
@@ -104,6 +104,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create-latest-release.outputs.upload_url }}
-          asset_path: ./hacker-laws.pdf
+          asset_path: ./hacker-laws-pdf/hacker-laws.pdf
           asset_name: hacker-laws.pdf
           asset_content_type: application/pdf
