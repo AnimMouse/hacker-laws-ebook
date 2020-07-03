@@ -14,17 +14,14 @@ jobs:
           submodules: true
           fetch-depth: 1
           
-      - name: Copy script
-        run: |
-          cp ebook.sh ./hacker-laws/ebook.sh
+      - name: Copy hacker-laws
+        run: cp ./hacker-laws/README.md README.md
           
       - name: Fix ebook
         run: sh ebook.sh
-        working-directory: ./hacker-laws
           
       - name: Create PDF
         uses: docker://pandoc/latex:latest
-        working-directory: ./hacker-laws
         with:
           args: >-
             -V
@@ -40,7 +37,6 @@ jobs:
           
       - name: Upload created PDF
         uses: actions/upload-artifact@v2
-        working-directory: ./hacker-laws
         with:
           name: hacker-laws PDF
           path: hacker-laws.pdf
