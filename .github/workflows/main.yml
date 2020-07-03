@@ -48,8 +48,8 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: Create Release
-        id: create-release
+      - name: Create Latest Release
+        id: create-latest-release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -59,12 +59,33 @@ jobs:
           draft: false
           prerelease: false
           
-      - name: Upload Release Asset
+      - name: Upload Latest Release Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          upload_url: ${{ steps.create-latest-release.outputs.upload_url }}
+          asset_path: ./hacker-laws.pdf
+          asset_name: hacker-laws.pdf
+          asset_content_type: application/pdf
+          
+      - name: Create Numbered Release
+        id: create-numbered-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v$GITHUB_RUN_NUMBER
+          release_name: v$GITHUB_RUN_NUMBER
+          draft: false
+          prerelease: false
+          
+      - name: Upload Numbered Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-numbered-release.outputs.upload_url }}
           asset_path: ./hacker-laws.pdf
           asset_name: hacker-laws.pdf
           asset_content_type: application/pdf
