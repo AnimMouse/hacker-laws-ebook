@@ -14,13 +14,15 @@ jobs:
           submodules: true
           fetch-depth: 1
           
-      - name: Copy assets
+      - name: Move assets
         run: |
-          cp -v ./hacker-laws/README.md README.md
-          cp -av ./hacker-laws/images ./images
+          mv -v ./hacker-laws/README.md README.md
+          mv -v ./hacker-laws/images ./images
           
       - name: Create MD for ebook
-        run: sh -x ebook.sh
+        run: |
+          chmod +x ebook.sh
+          ./ebook.sh
           
       - name: Create PDF
         uses: docker://pandoc/latex:latest
@@ -43,12 +45,7 @@ jobs:
           name: hacker-laws-pdf
           path: hacker-laws.pdf
           
-      - name: Delete latest before release
-        uses: ame-yu/action-delete-latest-release@v2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          
-  numbered-release:
+  release:
     needs: build
     runs-on: ubuntu-20.04
     steps:
@@ -57,8 +54,8 @@ jobs:
         with:
           name: hacker-laws-pdf
           
-      - name: Create Numbered Release
-        id: create-numbered-release
+      - name: Create Release
+        id: create-release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -73,37 +70,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create-numbered-release.outputs.upload_url }}
-          asset_path: ./hacker-laws.pdf
-          asset_name: hacker-laws.pdf
-          asset_content_type: application/pdf
-          
-  latest-release:
-    needs: numbered-release
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: hacker-laws-pdf
-          
-      - name: Create Latest Release
-        id: create-latest-release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: latest
-          release_name: Latest Release
-          draft: false
-          prerelease: false
-          
-      - name: Upload Latest Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create-latest-release.outputs.upload_url }}
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
           asset_path: ./hacker-laws.pdf
           asset_name: hacker-laws.pdf
           asset_content_type: application/pdf
