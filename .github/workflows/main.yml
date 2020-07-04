@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: hacker-laws-pdf
           
@@ -63,8 +63,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ github.run_number }}
-          release_name: v${{ github.run_number }}
+          tag_name: "#${{ github.run_number }}"
+          release_name: "#${{ github.run_number }}"
           draft: false
           prerelease: false
           
@@ -74,7 +74,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create-numbered-release.outputs.upload_url }}
-          asset_path: ./hacker-laws-pdf/hacker-laws.pdf
+          asset_path: ./hacker-laws.pdf
           asset_name: hacker-laws.pdf
           asset_content_type: application/pdf
           
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: hacker-laws-pdf
           
@@ -104,6 +104,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create-latest-release.outputs.upload_url }}
-          asset_path: ./hacker-laws-pdf/hacker-laws.pdf
+          asset_path: ./hacker-laws.pdf
           asset_name: hacker-laws.pdf
           asset_content_type: application/pdf
