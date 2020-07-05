@@ -68,7 +68,7 @@ jobs:
           draft: false
           prerelease: false
           
-      - name: Upload Numbered Release Asset
+      - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
