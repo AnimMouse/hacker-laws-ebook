@@ -1,0 +1,76 @@
+name: Create PDF ebook on pull request
+on:
+  pull_request:
+    branches:
+      - master
+      
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          fetch-depth: 1
+          
+      - name: Move assets
+        run: |
+          mv -v ./hacker-laws/README.md README.md
+          mv -v ./hacker-laws/images ./images
+          
+      - name: Create MD for ebook
+        run: |
+          chmod +x ebook.sh
+          ./ebook.sh
+          
+      - name: Create PDF
+        uses: docker://pandoc/latex:latest
+        with:
+          args: >- # allows you to break string into multiple lines
+            -V
+            toc-title:"Table
+            Of
+            Contents"
+            --toc
+            --pdf-engine=pdflatex
+            -s
+            -o
+            hacker-laws.pdf
+            hacker-laws.md
+          
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: hacker-laws-pdf
+          path: hacker-laws.pdf
+          
+  release:
+    needs: build
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: hacker-laws-pdf
+          
+      - name: Create Release
+        id: create-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "a#${{ github.run_number }}"
+          release_name: "Auto #${{ github.run_number }}"
+          draft: false
+          prerelease: true
+          
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: ./hacker-laws.pdf
+          asset_name: hacker-laws.pdf
+          asset_content_type: application/pdf

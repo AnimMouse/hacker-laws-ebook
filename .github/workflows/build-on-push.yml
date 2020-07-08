@@ -1,9 +1,6 @@
-name: Create PDF ebook
+name: Create PDF ebook on push
 on:
   push:
-    branches:
-      - master
-  pull_request:
     branches:
       - master
       
