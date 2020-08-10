@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # commit abd0df9699e8ac17441ae00559c25b8f7fd50dc8
+# This script is taken from the asset folder of hacker-laws
 
 # Create the frontmatter.
 cat << EOF > frontmatter.md

@@ -20,10 +20,8 @@ jobs:
           mv -v ./hacker-laws/images ./images
           
       - name: Create MD for ebook
-        run: |
-          chmod +x ebook.sh
-          ./ebook.sh
-          
+        run: ./ebook.sh
+        
       - name: Create PDF
         uses: docker://pandoc/latex:latest
         with:
